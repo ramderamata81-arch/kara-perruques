@@ -100,11 +100,11 @@ const AdminDashboard = () => {
           <div className="flex gap-4">
             <button 
               onClick={handleLogout}
-            className="flex items-center text-red-600 hover:text-red-800 transition-colors"
-          >
-            <LogOut size={20} className="mr-2" />
-            Déconnexion
-          </button>
+              title="Déconnexion"
+              className="flex items-center text-red-600 hover:text-red-800 transition-colors p-2 rounded-full hover:bg-red-50"
+            >
+              <LogOut size={24} />
+            </button>
         </div>
       </div>
 
