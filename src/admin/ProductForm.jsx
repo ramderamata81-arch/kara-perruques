@@ -10,13 +10,17 @@ const ProductForm = () => {
   const navigate = useNavigate();
   const isEditing = !!id;
 
-  const [formData, setFormData] = useState({
-    nom: '',
-    prix: '',
-    enPromo: false,
-    prixPromo: '',
-    description: '',
-    publishAt: ''
+  const [formData, setFormData] = useState(() => {
+    const d = new Date();
+    const nowStr = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+    return {
+      nom: '',
+      prix: '',
+      enPromo: false,
+      prixPromo: '',
+      description: '',
+      publishAt: nowStr
+    };
   });
   
   const [images, setImages] = useState([]); // tableau de URLs de photos
