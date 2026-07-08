@@ -65,9 +65,6 @@ const ProductGrid = () => {
             <div className="h-4 bg-gray-200 rounded w-48 mt-3 animate-pulse"></div>
           </div>
         </div>
-            <div className="h-4 bg-gray-200 rounded w-48 mt-3 animate-pulse"></div>
-          </div>
-        </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
           {[1, 2, 3, 4].map(n => (
             <div key={n} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
