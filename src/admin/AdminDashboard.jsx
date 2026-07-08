@@ -111,15 +111,7 @@ const AdminDashboard = () => {
 
       {/* Carte Statistiques */}
       <div className="mb-8">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold text-gray-800">Aperçu</h2>
-          <button 
-            onClick={() => setShowStats(!showStats)} 
-            className="text-sm text-brand font-medium hover:underline flex items-center"
-          >
-            {showStats ? <><EyeOff size={16} className="mr-1"/> Masquer les stats</> : <><Eye size={16} className="mr-1"/> Afficher les stats</>}
-          </button>
-        </div>
+        <h2 className="text-xl font-semibold text-gray-800 mb-4">Aperçu</h2>
         
         {showStats ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -128,16 +120,24 @@ const AdminDashboard = () => {
                 <p className="text-white/80 font-medium mb-1">Total des Visites</p>
                 <h3 className="text-4xl font-black">{visitsCount}</h3>
               </div>
-              <div className="bg-white/20 p-4 rounded-full">
-                <Eye size={32} />
-              </div>
+              <button 
+                onClick={() => setShowStats(false)}
+                title="Masquer les statistiques"
+                className="bg-white/20 hover:bg-white/30 p-4 rounded-full transition-colors cursor-pointer"
+              >
+                <EyeOff size={32} />
+              </button>
             </div>
           </div>
         ) : (
-          <div className="bg-white border border-gray-100 shadow-sm rounded-lg p-3 text-gray-500 text-sm flex items-center gap-3">
-            <div className="bg-brand-light p-2 rounded-full text-brand">
+          <div className="bg-white border border-gray-100 shadow-sm rounded-lg p-3 text-gray-500 text-sm flex items-center gap-3 w-fit">
+            <button 
+              onClick={() => setShowStats(true)}
+              title="Afficher les statistiques"
+              className="bg-brand-light hover:bg-brand-light/80 p-2 rounded-full text-brand transition-colors cursor-pointer"
+            >
               <Eye size={16} />
-            </div>
+            </button>
             <span className="font-medium text-gray-700">{visitsCount}</span> visites totales depuis le lancement.
           </div>
         )}
