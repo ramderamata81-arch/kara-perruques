@@ -8,7 +8,15 @@ const OrderButton = ({ product }) => {
   const handleOrder = () => {
     trackOrderClick(product.id, product.nom);
     const productUrl = `${window.location.origin}/product/${product.id}`;
-    const text = `Bonjour, je veux passer la commande de cet article.\n\nLien : ${productUrl}`;
+    
+    let mediaLink = "";
+    if (product.imageUrl) {
+      mediaLink = `\nPhoto : ${product.imageUrl}`;
+    } else if (product.videoUrl) {
+      mediaLink = `\nVidéo : ${product.videoUrl}`;
+    }
+
+    const text = `Bonjour, je veux commander cet article : *${product.nom}*.\n\nLien : ${productUrl}${mediaLink}`;
     const encodedText = encodeURIComponent(text);
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedText}`;
     

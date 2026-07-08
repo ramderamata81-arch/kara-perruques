@@ -23,7 +23,15 @@ const ProductCard = ({ product }) => {
     e.preventDefault(); // Empêche le clic de rediriger vers la page détails
     trackOrderClick(product.id, product.nom);
     const productUrl = `${window.location.origin}/product/${product.id}`;
-    const message = `Bonjour, je veux passer la commande de cet article.\n\nLien : ${productUrl}`;
+    
+    let mediaLink = "";
+    if (displayImage) {
+      mediaLink = `\nPhoto : ${displayImage}`;
+    } else if (product.videoUrl) {
+      mediaLink = `\nVidéo : ${product.videoUrl}`;
+    }
+
+    const message = `Bonjour, je veux commander cet article : *${product.nom}*.\n\nLien : ${productUrl}${mediaLink}`;
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
