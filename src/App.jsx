@@ -161,7 +161,7 @@ function App() {
         
         <footer className="bg-white border-t py-6 mt-auto">
           <div className="max-w-5xl mx-auto px-4 text-center text-gray-500 text-sm">
-            &copy; {new Date().getFullYear()} KARA. Tous droits réservés.
+            &copy; {new Date().getFullYear()} KARA. Par Ramde Ramata.
           </div>
         </footer>
       </div>
