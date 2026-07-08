@@ -99,6 +99,16 @@ function App() {
     <BrowserRouter>
       <div className="min-h-screen flex flex-col bg-gray-50/50 selection:bg-brand selection:text-white">
         
+        {/* Bandeau d'annonce (Marquee) */}
+        <div className="bg-brand-dark text-white text-xs md:text-sm font-semibold py-2 overflow-hidden relative z-50">
+          <div className="whitespace-nowrap animate-marquee flex gap-10">
+            <span>🔥 NOUVELLE COLLECTION DISPONIBLE ! Qualité Premium garantie ✨</span>
+            <span>💎 Livraison partout à Abidjan 🚚</span>
+            <span>🔥 NOUVELLE COLLECTION DISPONIBLE ! Qualité Premium garantie ✨</span>
+            <span>💎 Livraison partout à Abidjan 🚚</span>
+          </div>
+        </div>
+        
         {/* Premium Header */}
         <motion.header 
           initial={{ y: -100 }}

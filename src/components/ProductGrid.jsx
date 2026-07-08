@@ -30,24 +30,16 @@ const itemVariants = {
 const ProductGrid = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showOnlyPromo, setShowOnlyPromo] = useState(false);
 
   useEffect(() => {
-    // Only fetch products where publishAt <= now
     const now = new Date();
-    
-    // Create query
-    const q = query(
-      collection(db, 'products'),
-      where('publishAt', '<=', now),
-      orderBy('publishAt', 'desc')
-    );
+    const q = query(collection(db, 'products'), where('publishAt', '<=', now), orderBy('publishAt', 'desc'));
 
-    // Listen for real-time updates
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const productsData = [];
-      querySnapshot.forEach((doc) => {
-        productsData.push({ id: doc.id, ...doc.data() });
-      });
+      querySnapshot.forEach((doc) => productsData.push({ id: doc.id, ...doc.data() }));
       setProducts(productsData);
       setLoading(false);
     }, (error) => {
@@ -58,12 +50,21 @@ const ProductGrid = () => {
     return () => unsubscribe();
   }, []);
 
+  const filteredProducts = products.filter(p => {
+    const matchSearch = p.nom.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchPromo = showOnlyPromo ? p.enPromo : true;
+    return matchSearch && matchPromo;
+  });
+
   if (loading) {
     return (
       <div className="py-8">
-        <div className="flex items-end justify-between mb-10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
           <div>
             <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight">Notre Collection</h2>
+            <div className="h-4 bg-gray-200 rounded w-48 mt-3 animate-pulse"></div>
+          </div>
+        </div>
             <div className="h-4 bg-gray-200 rounded w-48 mt-3 animate-pulse"></div>
           </div>
         </div>
@@ -105,33 +106,60 @@ const ProductGrid = () => {
   }
 
   return (
-    <div className="py-8">
-      <div className="flex items-end justify-between mb-10">
+    <div className="py-8" id="collection">
+      <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
         <div>
           <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight">Notre Collection</h2>
           <p className="text-gray-500 mt-2">Découvrez nos perruques de qualité premium.</p>
         </div>
-      </div>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
-        {products.map((product, index) => (
-          <motion.div 
-            key={product.id} 
-            initial={{ opacity: 0, y: 50, scale: 0.95 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ 
-              duration: 0.5, 
-              delay: index * 0.15, // Stagger effect based on index
-              type: "spring", 
-              stiffness: 100, 
-              damping: 15 
-            }}
-            className="h-full"
+        
+        {/* Filtres & Recherche */}
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="relative">
+            <svg xmlns="http://www.w3.org/2000/svg" className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input 
+              type="text" 
+              placeholder="Chercher (ex: Lisse...)"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10 pr-4 py-2 border border-gray-200 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent shadow-sm w-full sm:w-64"
+            />
+          </div>
+          <button 
+            onClick={() => setShowOnlyPromo(!showOnlyPromo)}
+            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold border transition-all ${showOnlyPromo ? 'bg-red-50 text-red-600 border-red-200 shadow-sm' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'}`}
           >
-            <ProductCard product={product} />
-          </motion.div>
-        ))}
+            🔥 Promo
+          </button>
+        </div>
       </div>
+
+      {filteredProducts.length === 0 ? (
+        <div className="text-center py-16 text-gray-500 bg-white rounded-2xl border border-gray-100 shadow-sm">
+          Aucune perruque ne correspond à votre recherche.
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
+          {filteredProducts.map((product, index) => (
+            <motion.div 
+              key={product.id} 
+              initial={{ opacity: 0, y: 50, scale: 0.95 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ 
+                duration: 0.5, 
+                delay: index * 0.15,
+                type: "spring", 
+                stiffness: 100, 
+                damping: 15 
+              }}
+              className="h-full"
+            >
+              <ProductCard product={product} />
+            </motion.div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

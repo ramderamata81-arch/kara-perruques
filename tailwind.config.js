@@ -13,6 +13,15 @@ export default {
           dark: '#581c87', // purple-900
           gold: '#d4af37',
         }
+      },
+      animation: {
+        marquee: 'marquee 25s linear infinite',
+      },
+      keyframes: {
+        marquee: {
+          '0%': { transform: 'translateX(100%)' },
+          '100%': { transform: 'translateX(-100%)' },
+        }
       }
     },
   },

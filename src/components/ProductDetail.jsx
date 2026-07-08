@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, query, where, orderBy, limit, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
+import ProductCard from './ProductCard';
 import { ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react';
 import OrderButton from './OrderButton';
 import ShareButton from './ShareButton';
@@ -122,6 +123,7 @@ const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
+  const [similarProducts, setSimilarProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -132,6 +134,16 @@ const ProductDetail = () => {
         
         if (docSnap.exists()) {
           setProduct({ id: docSnap.id, ...docSnap.data() });
+
+          // Fetch similar products (derniers produits publiés)
+          const now = new Date();
+          const q = query(collection(db, 'products'), where('publishAt', '<=', now), orderBy('publishAt', 'desc'), limit(4));
+          const simSnap = await getDocs(q);
+          const simData = [];
+          simSnap.forEach(d => {
+            if (d.id !== id) simData.push({ id: d.id, ...d.data() });
+          });
+          setSimilarProducts(simData.slice(0, 3));
         } else {
           console.log("No such document!");
         }
@@ -238,6 +250,18 @@ const ProductDetail = () => {
           </motion.div>
         </motion.div>
       </div>
+
+      {/* Section Vous aimerez aussi... */}
+      {similarProducts.length > 0 && (
+        <div className="mt-16 mb-8">
+          <h3 className="text-2xl md:text-3xl font-extrabold text-gray-900 mb-8 text-center md:text-left tracking-tight">Vous aimerez aussi...</h3>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+            {similarProducts.map(prod => (
+              <ProductCard key={prod.id} product={prod} />
+            ))}
+          </div>
+        </div>
+      )}
     </motion.div>
   );
 };
