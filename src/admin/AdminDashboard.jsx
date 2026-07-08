@@ -3,7 +3,7 @@ import { collection, query, orderBy, onSnapshot, deleteDoc, doc, getCountFromSer
 import { auth, db } from '../firebase';
 import { signOut } from 'firebase/auth';
 import { useNavigate, Link } from 'react-router-dom';
-import { Plus, Edit2, Trash2, LogOut, Settings, Clock, CheckCircle, Eye, MessageCircle } from 'lucide-react';
+import { Plus, Edit2, Trash2, LogOut, Settings, Clock, CheckCircle, Eye, EyeOff, MessageCircle } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
@@ -12,6 +12,7 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [visitsCount, setVisitsCount] = useState(0);
   const [orderStats, setOrderStats] = useState({});
+  const [showStats, setShowStats] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -109,16 +110,37 @@ const AdminDashboard = () => {
       </div>
 
       {/* Carte Statistiques */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-gradient-to-br from-brand to-brand-dark rounded-xl p-6 text-white shadow-md flex items-center justify-between">
-          <div>
-            <p className="text-white/80 font-medium mb-1">Total des Visites</p>
-            <h3 className="text-4xl font-black">{visitsCount}</h3>
-          </div>
-          <div className="bg-white/20 p-4 rounded-full">
-            <Eye size={32} />
-          </div>
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-semibold text-gray-800">Aperçu</h2>
+          <button 
+            onClick={() => setShowStats(!showStats)} 
+            className="text-sm text-brand font-medium hover:underline flex items-center"
+          >
+            {showStats ? <><EyeOff size={16} className="mr-1"/> Masquer les stats</> : <><Eye size={16} className="mr-1"/> Afficher les stats</>}
+          </button>
         </div>
+        
+        {showStats ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-gradient-to-br from-brand to-brand-dark rounded-xl p-6 text-white shadow-md flex items-center justify-between">
+              <div>
+                <p className="text-white/80 font-medium mb-1">Total des Visites</p>
+                <h3 className="text-4xl font-black">{visitsCount}</h3>
+              </div>
+              <div className="bg-white/20 p-4 rounded-full">
+                <Eye size={32} />
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="bg-white border border-gray-100 shadow-sm rounded-lg p-3 text-gray-500 text-sm flex items-center gap-3">
+            <div className="bg-brand-light p-2 rounded-full text-brand">
+              <Eye size={16} />
+            </div>
+            <span className="font-medium text-gray-700">{visitsCount}</span> visites totales depuis le lancement.
+          </div>
+        )}
       </div>
 
       <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
