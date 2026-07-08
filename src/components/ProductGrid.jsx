@@ -3,6 +3,7 @@ import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestor
 import { db } from '../firebase';
 import ProductCard from './ProductCard';
 import { motion } from 'framer-motion';
+import { Mic } from 'lucide-react';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -32,6 +33,35 @@ const ProductGrid = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [showOnlyPromo, setShowOnlyPromo] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+
+  const handleVoiceSearch = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("La recherche vocale n'est pas supportée sur ce navigateur.");
+      return;
+    }
+    
+    if (isListening) return; // Déjà en écoute
+    
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'fr-FR';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => setIsListening(true);
+    
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      setSearchTerm(transcript);
+    };
+
+    recognition.onerror = (event) => console.error("Erreur vocale :", event.error);
+    
+    recognition.onend = () => setIsListening(false);
+
+    recognition.start();
+  };
 
   useEffect(() => {
     const now = new Date();
@@ -119,8 +149,15 @@ const ProductGrid = () => {
               placeholder="Chercher (ex: Lisse...)"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-2 border border-gray-200 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent shadow-sm w-full sm:w-64"
+              className="pl-10 pr-12 py-2 border border-gray-200 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent shadow-sm w-full sm:w-64"
             />
+            <button 
+              onClick={handleVoiceSearch}
+              className={`absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full transition-all ${isListening ? 'bg-red-500 text-white animate-pulse shadow-md shadow-red-500/40' : 'text-gray-400 hover:text-brand hover:bg-brand-light'}`}
+              title="Recherche vocale"
+            >
+              <Mic size={16} />
+            </button>
           </div>
           <button 
             onClick={() => setShowOnlyPromo(!showOnlyPromo)}
