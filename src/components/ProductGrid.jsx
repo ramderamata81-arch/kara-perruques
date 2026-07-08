@@ -67,66 +67,22 @@ const ProductGrid = () => {
   }
 
   if (products.length === 0) {
-    const handleSimulation = async () => {
-      setLoading(true);
-      const pastDate = new Date(Date.now() - 60000); // 1 minute dans le passé pour être sûr
-      const fakeProducts = [
-        {
-          nom: "Perruque Brésilienne Lisse 24\"",
-          prix: 45000,
-          description: "Cheveux 100% humains, texture lisse et soyeuse. Idéale pour un look élégant au quotidien.",
-          imageUrl: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=600&auto=format&fit=crop",
-          publishAt: pastDate
-        },
-        {
-          nom: "Carré Plongeant Bouclé 12\"",
-          prix: 35000,
-          description: "Coupe courte très tendance. Boucles bien définies qui durent toute la journée.",
-          imageUrl: "https://images.unsplash.com/photo-1519699047748-de8e457a634e?q=80&w=600&auto=format&fit=crop",
-          publishAt: pastDate
-        },
-        {
-          nom: "Perruque Kinky Curly 18\"",
-          prix: 55000,
-          description: "Volume incroyable ! Texture Kinky Curly authentique. Densité 180%.",
-          imageUrl: "https://images.unsplash.com/photo-1580618672591-eb180b1a973f?q=80&w=600&auto=format&fit=crop",
-          publishAt: pastDate
-        },
-        {
-          nom: "Frontal Lace Ondulée 20\"",
-          prix: 60000,
-          description: "Lace HD indétectable. Ondulations sublimes parfaites pour les grandes occasions.",
-          imageUrl: "https://images.unsplash.com/photo-1605980776566-0486c3ac7617?q=80&w=600&auto=format&fit=crop",
-          publishAt: pastDate
-        }
-      ];
-
-      try {
-        const { collection, addDoc, serverTimestamp } = await import('firebase/firestore');
-        for (const p of fakeProducts) {
-          await addDoc(collection(db, 'products'), {
-            ...p,
-            createdAt: serverTimestamp()
-          });
-        }
-        setLoading(false); // Arrêter le chargement après le succès
-      } catch (e) {
-        console.error("Erreur de simulation", e);
-        alert("Erreur lors de la simulation");
-        setLoading(false);
-      }
-    };
-
     return (
       <div className="text-center py-20 px-4 bg-white rounded-3xl shadow-sm border border-brand-light">
-        <h3 className="text-2xl font-bold text-gray-900 mb-3">Votre boutique est vide</h3>
-        <p className="text-gray-500 mb-8 max-w-md mx-auto">Voulez-vous lancer une simulation pour voir à quoi ressemblera votre site avec des perruques ?</p>
-        <button 
-          onClick={handleSimulation}
-          className="bg-brand hover:bg-brand-dark text-white font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+        <div className="text-6xl mb-6">✨</div>
+        <h3 className="text-2xl font-bold text-gray-900 mb-3">Nos perruques arrivent bientôt !</h3>
+        <p className="text-gray-500 mb-8 max-w-md mx-auto">Notre collection est en cours de préparation. Revenez très vite pour découvrir nos plus belles perruques.</p>
+        <a 
+          href="https://wa.me/2250769434390?text=Bonjour%20!%20Je%20voudrais%20savoir%20quand%20les%20perruques%20seront%20disponibles."
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
         >
-          Lancer la simulation (Ajouter de faux produits)
-        </button>
+          <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824zm-3.423-14.416c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm.029 18.88c-1.161 0-2.305-.292-3.318-.844l-3.677.964.984-3.595c-.607-1.052-.927-2.246-.926-3.468.001-3.825 3.113-6.937 6.937-6.937 3.825 0 6.938 3.112 6.938 6.937 0 3.825-3.113 6.938-6.938 6.938z"/>
+          </svg>
+          Contactez-nous sur WhatsApp
+        </a>
       </div>
     );
   }
