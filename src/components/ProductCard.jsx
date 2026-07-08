@@ -24,14 +24,15 @@ const ProductCard = ({ product }) => {
     trackOrderClick(product.id, product.nom);
     const productUrl = `${window.location.origin}/product/${product.id}`;
     
-    let mediaLink = "";
+    let thumbnailLink = "";
     if (displayImage) {
-      mediaLink = `\nPhoto : ${displayImage}`;
+      thumbnailLink = displayImage;
     } else if (product.videoUrl) {
-      mediaLink = `\nVidéo : ${product.videoUrl}`;
+      // Astuce Cloudinary : on remplace .mp4 par .jpg pour forcer une miniature photo
+      thumbnailLink = product.videoUrl.replace(/\.[^/.]+$/, ".jpg");
     }
 
-    const message = `Bonjour, je veux commander cet article : *${product.nom}*.\n\nLien : ${productUrl}${mediaLink}`;
+    const message = `Bonjour, je veux commander cet article : *${product.nom}*.\n\nPhoto de l'article : ${thumbnailLink}\n\nVoir sur la boutique : ${productUrl}`;
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };

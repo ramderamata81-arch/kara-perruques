@@ -9,14 +9,15 @@ const OrderButton = ({ product }) => {
     trackOrderClick(product.id, product.nom);
     const productUrl = `${window.location.origin}/product/${product.id}`;
     
-    let mediaLink = "";
+    let thumbnailLink = "";
     if (product.imageUrl) {
-      mediaLink = `\nPhoto : ${product.imageUrl}`;
+      thumbnailLink = product.imageUrl;
     } else if (product.videoUrl) {
-      mediaLink = `\nVidéo : ${product.videoUrl}`;
+      // Astuce Cloudinary : on remplace .mp4 par .jpg pour forcer une miniature photo
+      thumbnailLink = product.videoUrl.replace(/\.[^/.]+$/, ".jpg");
     }
 
-    const text = `Bonjour, je veux commander cet article : *${product.nom}*.\n\nLien : ${productUrl}${mediaLink}`;
+    const text = `Bonjour, je veux commander cet article : *${product.nom}*.\n\nPhoto de l'article : ${thumbnailLink}\n\nVoir sur la boutique : ${productUrl}`;
     const encodedText = encodeURIComponent(text);
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedText}`;
     
