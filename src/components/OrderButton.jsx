@@ -8,7 +8,7 @@ const OrderButton = ({ product }) => {
   const handleOrder = () => {
     trackOrderClick(product.id, product.nom);
     const productUrl = `${window.location.origin}/product/${product.id}`;
-    const text = `Bonjour, je veux passer la commande de cet article.\n\nLien : ${productUrl}\nPhoto : ${product.imageUrl}`;
+    const text = `Bonjour, je veux passer la commande de cet article.\n\nLien : ${productUrl}`;
     const encodedText = encodeURIComponent(text);
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedText}`;
     
