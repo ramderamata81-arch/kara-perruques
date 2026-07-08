@@ -8,8 +8,17 @@ const ProductCard = ({ product }) => {
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
   
   // S'il y a plusieurs photos, on les fait défiler automatiquement toutes les 2.5 secondes
+  // Optimisation Cloudinary pour un chargement ultra-rapide (compression automatique)
+  const optimizeMediaUrl = (url) => {
+    if (!url || !url.includes('cloudinary.com')) return url;
+    if (url.includes('/upload/q_')) return url;
+    return url.replace('/upload/', '/upload/q_auto,f_auto,w_800/');
+  };
+
   const hasMultipleImages = product.images && product.images.length > 1;
-  const displayImage = hasMultipleImages ? product.images[currentImgIndex] : product.imageUrl;
+  const rawDisplayImage = hasMultipleImages ? product.images[currentImgIndex] : product.imageUrl;
+  const displayImage = optimizeMediaUrl(rawDisplayImage);
+  const optimizedVideoUrl = optimizeMediaUrl(product.videoUrl);
 
   useEffect(() => {
     if (!hasMultipleImages) return;
@@ -52,9 +61,9 @@ const ProductCard = ({ product }) => {
           </div>
         )}
 
-        {product.videoUrl ? (
+        {optimizedVideoUrl ? (
           <video 
-            src={product.videoUrl} 
+            src={optimizedVideoUrl} 
             className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out"
             muted 
             autoPlay 

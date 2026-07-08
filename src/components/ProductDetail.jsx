@@ -13,7 +13,16 @@ const ImageCarousel = ({ images, videoUrl }) => {
   const [current, setCurrent] = useState(0);
   const carouselRef = React.useRef(null);
   
-  const allMedia = videoUrl ? [{ type: 'video', url: videoUrl }] : images.map(url => ({ type: 'image', url }));
+  const optimizeMediaUrl = (url) => {
+    if (!url || !url.includes('cloudinary.com')) return url;
+    if (url.includes('/upload/q_')) return url;
+    return url.replace('/upload/', '/upload/q_auto,f_auto,w_1080/'); // Plus grande qualité pour la page détaillée
+  };
+
+  const optimizedVideoUrl = optimizeMediaUrl(videoUrl);
+  const optimizedImages = images ? images.map(optimizeMediaUrl) : [];
+
+  const allMedia = optimizedVideoUrl ? [{ type: 'video', url: optimizedVideoUrl }] : optimizedImages.map(url => ({ type: 'image', url }));
   const total = allMedia.length;
 
   const handleScroll = (e) => {
