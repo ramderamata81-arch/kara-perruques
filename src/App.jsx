@@ -26,6 +26,9 @@ const ProtectedRoute = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
+      if (currentUser) {
+        localStorage.setItem('isAdmin', 'true');
+      }
       setLoading(false);
     });
     return () => unsubscribe();
@@ -81,6 +84,11 @@ function App() {
     // On utilise sessionStorage pour ne pas compter le même visiteur plusieurs fois par session
     if (!sessionStorage.getItem('visited')) {
       const recordVisit = async () => {
+        // Ne pas compter si c'est la page admin ou si c'est l'appareil de l'administratrice
+        if (window.location.pathname.startsWith('/admin') || window.location.pathname.startsWith('/login') || localStorage.getItem('isAdmin') === 'true') {
+          return;
+        }
+
         try {
           await addDoc(collection(db, 'visits'), {
             timestamp: serverTimestamp(),
