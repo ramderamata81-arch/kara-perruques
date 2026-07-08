@@ -234,7 +234,7 @@ const ProductForm = () => {
         enPromo: formData.enPromo,
         prixPromo: formData.enPromo && formData.prixPromo ? Number(formData.prixPromo) : null,
         description: formData.description,
-        publishAt: formData.publishAt ? Timestamp.fromDate(new Date(formData.publishAt)) : null,
+        publishAt: formData.publishAt ? Timestamp.fromDate(new Date(formData.publishAt)) : serverTimestamp(),
         updatedAt: serverTimestamp()
       };
 
