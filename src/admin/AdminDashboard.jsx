@@ -96,8 +96,7 @@ const AdminDashboard = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Tableau de bord</h1>
+      <div className="flex justify-end items-center mb-6">
           <div className="flex gap-4">
             <button 
               onClick={handleLogout}
@@ -111,8 +110,6 @@ const AdminDashboard = () => {
 
       {/* Carte Statistiques */}
       <div className="mb-8">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">Aperçu</h2>
-        
         {showStats ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-gradient-to-br from-brand to-brand-dark rounded-xl p-6 text-white shadow-md flex items-center justify-between">
